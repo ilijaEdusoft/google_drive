@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "e/qvuYfSDd3HdYVOesvtzRc1AwLpI27Ck6kOFmXdZM89JzIOZDuvRW7oHgSppFN6kOLlhdomd+rz5oawQEDD2Q==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\ilijat\\source\\google_drive_upload\\google_drive_upload\\google_drive_upload.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ilijat\\.nuget\\packages\\google.apis\\1.56.0\\google.apis.1.56.0.nupkg.sha512",
+    "C:\\Users\\ilijat\\.nuget\\packages\\google.apis.auth\\1.56.0\\google.apis.auth.1.56.0.nupkg.sha512",
+    "C:\\Users\\ilijat\\.nuget\\packages\\google.apis.core\\1.56.0\\google.apis.core.1.56.0.nupkg.sha512",
+    "C:\\Users\\ilijat\\.nuget\\packages\\google.apis.drive.v3\\1.56.0.2601\\google.apis.drive.v3.1.56.0.2601.nupkg.sha512",
+    "C:\\Users\\ilijat\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\ilijat\\.nuget\\packages\\system.commandline\\2.0.0-beta3.22114.1\\system.commandline.2.0.0-beta3.22114.1.nupkg.sha512",
+    "C:\\Users\\ilijat\\.nuget\\packages\\system.commandline.namingconventionbinder\\2.0.0-beta3.22114.1\\system.commandline.namingconventionbinder.2.0.0-beta3.22114.1.nupkg.sha512"
+  ],
+  "logs": []
+}
