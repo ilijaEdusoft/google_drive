@@ -8,16 +8,15 @@ using System.Reflection;
 
 namespace google_drive_upload
 {
-    public static class Program
+    public class Uploader
     {
-        public static string[] Scopes = { DriveService.Scope.Drive };
-        public static string? _folderId = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_FOLDER_ID");
-        public static string? _ClientId = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_CLIENT_ID");
-        public static string? _ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_SECRET_KEY");
+        public string[] Scopes = { DriveService.Scope.Drive };
+        public string? _folderId = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_FOLDER_ID");
+        public string? _ClientId = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_CLIENT_ID");
+        public string? _ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_SECRET_KEY");
         public const string _regex = @"^[\w\-. ]+$";
-        public static string? _FileName;
 
-        public static int check_preconditions(string _FileName)
+        public int Check_Preconditions(string _FileName)
         {
             if (!(Regex.IsMatch(_FileName, _regex)))
             {
@@ -46,29 +45,30 @@ namespace google_drive_upload
             }
             return 0;
         }
-
-        public static int Main(string[] args)
+        public string UploadFile(string __fileName, string __filePath)
         {
-            var rootCommand = new RootCommand
+            var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(new ClientSecrets
             {
-                new Argument<string>("filename", "File to be uploaded!"),
-                new Option(
-                "--fp",
-                description: "Filepath is missing. Help!")
-            }.WithHandler(nameof(CMDHelper));
-            rootCommand.Description = "Utility ver 1.0 which uploads a file on specified google driver. \nPlease provide ENV variables:  GOOGLE_UPLOAD_FOLDER_ID, GOOGLE_UPLOAD_CLIENT_ID,\nGOOGLE_UPLOAD_SECRET_KEY. Args[0] is which is to be uploaded to Google Drive.\nPlease check the right file PATH...Missing arguments!";
-            return rootCommand.Invoke(args);
-        }
+                ClientId = _ClientId,
+                ClientSecret = _ClientSecret
+            },
+            Scopes,
+            "user", CancellationToken.None).Result;
 
-        private static string UploadFileToDrive(DriveService service, string fileName, string filePath, string contentType)
-        {
+            var service = new Google.Apis.Drive.v3.DriveService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential
+            });
+
+            Google.Apis.Drive.v3.FilesResource.ListRequest listRequest = service.Files.List();
+            listRequest.Fields = "nextPageToken, files(id, name)";
             var fileMatadata = new Google.Apis.Drive.v3.Data.File();
-            fileMatadata.Name = fileName;
+            fileMatadata.Name = __fileName;
             if (_folderId is not null)
                 fileMatadata.Parents = new List<string> { _folderId };
 
             FilesResource.CreateMediaUpload request;
-            using (var stream = new FileStream(filePath, FileMode.Open))
+            using (var stream = new FileStream(__filePath, FileMode.Open))
             {
 
                 request = service.Files.Create(fileMatadata, stream, String.Empty);
@@ -86,33 +86,32 @@ namespace google_drive_upload
                 return request.ResponseBody.Id;
             }
         }
-
-        private static int CMDHelper(string filename, IConsole console)
+    }
+    public static class Program
+    {
+        public static int Main(string[] args)
         {
+            var rootCommand = new RootCommand
+            {
+                new Argument<string>("filename", "File to be uploaded!"),
+                new Option(
+                "--fp",
+                description: "Filepath is missing. Help!")
+            }.WithHandler(nameof(CMDHelper));
+            rootCommand.Description = "Utility ver 1.0 which uploads a file on specified google driver. \nPlease provide ENV variables:  GOOGLE_UPLOAD_FOLDER_ID, GOOGLE_UPLOAD_CLIENT_ID,\nGOOGLE_UPLOAD_SECRET_KEY. Args[0] is which is to be uploaded to Google Drive.\nPlease check the right file PATH...Missing arguments!";
+            return rootCommand.Invoke(args);
+        }
+
+        private static int CMDHelper(string filename)
+        {
+            Uploader up = new Uploader();
             Console.WriteLine($"File to be uploaded {filename}");
             string _filePath = Path.GetFullPath(filename);
             string _fileName = Path.GetFileName(_filePath);
-            int err = check_preconditions(_fileName);
+            int err = up.Check_Preconditions(_fileName);
             if (err < 0)
                 return err;
-
-            var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(new ClientSecrets
-            {
-                ClientId = _ClientId,
-                ClientSecret = _ClientSecret
-            },
-            Scopes,
-            "user", CancellationToken.None).Result;
-
-            var service = new Google.Apis.Drive.v3.DriveService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential
-            });
-
-            Google.Apis.Drive.v3.FilesResource.ListRequest listRequest = service.Files.List();
-            listRequest.Fields = "nextPageToken, files(id, name)";
-
-            UploadFileToDrive(service, _fileName, _filePath, String.Empty);
+            up.UploadFile(_fileName, _filePath);
             return 0;
         }
         private static Command WithHandler(this Command command, string methodName)

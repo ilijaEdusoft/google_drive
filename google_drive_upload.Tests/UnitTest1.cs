@@ -1,13 +1,20 @@
-using google_drive_upload;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using Xunit;
+using google_drive_upload;
+using Google.Apis.Drive.v3;
+using System.Collections.Generic;
+using Google.Apis.Services;
+using Google.Apis.Auth.OAuth2;
+using System.Threading;
 
 namespace google_drive_upload.Tests
 {
 
     public class FileNameTest
     {
+        Uploader up = new Uploader();
         [Theory]
         [InlineData("Hel1oWo231.xlsx", true)]
         [InlineData("HelloWorld.docx", true)]
@@ -19,12 +26,9 @@ namespace google_drive_upload.Tests
         [InlineData("1091@$(-19Djw.pdf", false)]
         [InlineData("@3392jw#^@(@)38392.txt", false)]
         [InlineData("!@!@!()#*(!#!)(#&*!#^#$%$#&*(!.pdf", false)]
-        //vo testot za file dali postoi dodadi i so preconditions dali raboti
-
-        //vo configure na testot, treba da gi setirahs ENV variajblite i odsetirash za da proverish logikata
         public void checkFileName(string input, bool expected)
         {
-            string? reg = Program._regex;
+            string? reg = Uploader._regex;
             var r = new Regex(reg, RegexOptions.IgnoreCase);
             Assert.Equal(expected, r.Match(input).Success);
         }
@@ -35,30 +39,82 @@ namespace google_drive_upload.Tests
             var tempFilePath = Path.GetTempFileName();
             var file = new FileInfo(tempFilePath);
             Assert.True(file.Exists);
-            file.Delete();
         }
-
+        [Fact]
+        public void preconditionsCheckF()
+        {
+            var tempFile = Path.GetTempFileName();
+            var error = up.Check_Preconditions(tempFile);
+            Assert.NotNull(error);
+        }
+        [Fact]
+        public void preconditionsCheckNF()
+        {
+            var tempFile = Path.GetTempFileName();
+            var _file = new FileInfo(tempFile);
+            _file.Delete();
+            if ((String.IsNullOrEmpty(tempFile)))
+            {
+                var error1 = up.Check_Preconditions(tempFile);
+                Assert.Null(error1);
+            }
+        }
     };
-
     public class checkENV
     {
+        Uploader up = new Uploader();
         [Fact]
         public void checkClientID()
         {
-            string? _clientID = Program._ClientId;
+            string? _clientID = up._ClientId;
             Assert.NotNull(_clientID);
+        }
+        [Fact]
+        public void checkClientId()
+        {
+            string? clienId = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_CLIENT_ID");
+            Assert.NotNull(clienId);
+        }
+        [Fact]
+        public void checkClientSECRET()
+        {
+            string? _clientSecret = up._ClientSecret;
+            Assert.NotNull(_clientSecret);
         }
         [Fact]
         public void checkClientSecret()
         {
-            string? _clientSecret = Program._ClientSecret;
-            Assert.NotNull(_clientSecret);
+            string? clientSecret = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_SECRET_KEY");
+            Assert.NotNull(clientSecret);
         }
         [Fact]
         public void checkFolderID()
         {
-            string? _folderID = Program._folderId;
+            string? _folderID = up._folderId;
             Assert.NotNull(_folderID);
         }
+        [Fact]
+        public void checkFolderId()
+        {
+            string? folderId = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_FOLDER_ID");
+            Assert.NotNull(folderId);
+        }
     };
+
+    public class UploaderTest
+    {
+        [Fact]
+        public void checkUploader()
+        {
+            Uploader up = new Uploader();
+
+            var tmpFile = Path.GetTempPath();
+            var tmpName = Path.GetTempFileName();
+            var uploadedFile = up.UploadFile(tmpFile, tmpName);
+            Assert.NotNull(uploadedFile);
+            Assert.NotEmpty(uploadedFile);
+        }
+    };
+
 }
+
