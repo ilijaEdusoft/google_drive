@@ -35,3 +35,11 @@ C:\Users\ilijat\source\google_drive_upload\google_drive_upload\obj\Debug\net6.0\
 C:\Users\ilijat\source\google_drive_upload\google_drive_upload\obj\Debug\net6.0\google_drive_upload.pdb
 C:\Users\ilijat\source\google_drive_upload\google_drive_upload\obj\Debug\net6.0\google_drive_upload.genruntimeconfig.cache
 C:\Users\ilijat\source\google_drive_upload\google_drive_upload\obj\Debug\net6.0\ref\google_drive_upload.dll
+C:\Users\ilijat\source\google_drive_upload\google_drive_upload\bin\Debug\net6.0\Microsoft.AspNetCore.Http.Abstractions.dll
+C:\Users\ilijat\source\google_drive_upload\google_drive_upload\bin\Debug\net6.0\Microsoft.AspNetCore.Http.Features.dll
+C:\Users\ilijat\source\google_drive_upload\google_drive_upload\bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll
+C:\Users\ilijat\source\google_drive_upload\google_drive_upload\bin\Debug\net6.0\System.Composition.AttributedModel.dll
+C:\Users\ilijat\source\google_drive_upload\google_drive_upload\bin\Debug\net6.0\System.Composition.Convention.dll
+C:\Users\ilijat\source\google_drive_upload\google_drive_upload\bin\Debug\net6.0\System.Composition.Hosting.dll
+C:\Users\ilijat\source\google_drive_upload\google_drive_upload\bin\Debug\net6.0\System.Composition.Runtime.dll
+C:\Users\ilijat\source\google_drive_upload\google_drive_upload\bin\Debug\net6.0\System.Composition.TypedParts.dll

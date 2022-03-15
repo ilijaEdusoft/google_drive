@@ -2,16 +2,8 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using Xunit;
-using google_drive_upload;
-using Google.Apis.Drive.v3;
-using System.Collections.Generic;
-using Google.Apis.Services;
-using Google.Apis.Auth.OAuth2;
-using System.Threading;
-
 namespace google_drive_upload.Tests
 {
-
     public class FileNameTest
     {
         Uploader up = new Uploader();
@@ -32,7 +24,6 @@ namespace google_drive_upload.Tests
             var r = new Regex(reg, RegexOptions.IgnoreCase);
             Assert.Equal(expected, r.Match(input).Success);
         }
-
         [Fact]
         public void IsFileExists()
         {
@@ -40,24 +31,21 @@ namespace google_drive_upload.Tests
             var file = new FileInfo(tempFilePath);
             Assert.True(file.Exists);
         }
+
         [Fact]
-        public void preconditionsCheckF()
+        public void preconditionsCheckFileExists()
         {
             var tempFile = Path.GetTempFileName();
-            var error = up.Check_Preconditions(tempFile);
-            Assert.NotNull(error);
+            bool exists = up.FileExists(tempFile);
+            Assert.True(exists);
         }
         [Fact]
-        public void preconditionsCheckNF()
+        public void preconditionsCheckFileNotExists()
         {
             var tempFile = Path.GetTempFileName();
-            var _file = new FileInfo(tempFile);
-            _file.Delete();
-            if ((String.IsNullOrEmpty(tempFile)))
-            {
-                var error1 = up.Check_Preconditions(tempFile);
-                Assert.Null(error1);
-            }
+            File.Delete(tempFile);
+            bool exists = up.FileExists(tempFile);
+            Assert.False(exists);
         }
     };
     public class checkENV
@@ -108,13 +96,44 @@ namespace google_drive_upload.Tests
         {
             Uploader up = new Uploader();
 
-            var tmpFile = Path.GetTempPath();
-            var tmpName = Path.GetTempFileName();
-            var uploadedFile = up.UploadFile(tmpFile, tmpName);
-            Assert.NotNull(uploadedFile);
-            Assert.NotEmpty(uploadedFile);
+            var filePath = Path.GetTempFileName();
+            var fileName = Path.GetFileName(filePath);
+            var uploader = up.UploadFile(fileName, filePath);
+            Assert.NotNull(uploader);
+            Assert.NotEmpty(uploader);
         }
+
+        [Fact]
+        public void checkDownloader()
+        {
+            Uploader upl = new Uploader();
+            var filePath = Path.GetTempFileName();
+            var fileName = Path.GetFileName(filePath);
+            var fileID = upl.UploadFile(fileName, filePath);
+            string downloadPath = $"{upl._temp}{fileName}"; //gettempfolder
+            var downloader = upl.DownloadFile(fileID, downloadPath);
+            Assert.NotNull(downloader);
+            Assert.NotEmpty(downloader);
+        }
+
+        [Fact]
+        public void CompareFiles()
+        {
+            Uploader upl = new Uploader();
+            var filePath = Path.GetTempFileName();
+            var fileName = Path.GetFileName(filePath);
+            var _uploader = upl.UploadFile(fileName, filePath);
+            string? downloadPath = $"{upl._temp}{fileName}";
+            var _downloader = upl.DownloadFile(_uploader, downloadPath);
+            if (!String.IsNullOrEmpty(downloadPath))
+                Assert.Equal(_uploader, _downloader);
+            var uploader = _uploader.Length;
+            var downloader = _downloader.Length;
+            Assert.Equal(uploader, downloader);
+        }
+
     };
+
 
 }
 

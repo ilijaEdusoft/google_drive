@@ -9,8 +9,10 @@
       "google_drive_upload/1.0.1": {
         "dependencies": {
           "Google.Apis.Drive.v3": "1.56.0.2601",
+          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0",
           "System.CommandLine": "2.0.0-beta3.22114.1",
-          "System.CommandLine.NamingConventionBinder": "2.0.0-beta3.22114.1"
+          "System.CommandLine.NamingConventionBinder": "2.0.0-beta3.22114.1",
+          "System.Composition": "7.0.0-preview.1.22076.8"
         },
         "runtime": {
           "google_drive_upload.dll": {}
@@ -63,6 +65,41 @@
           "lib/netstandard2.0/Google.Apis.Drive.v3.dll": {
             "assemblyVersion": "1.56.0.2601",
             "fileVersion": "1.56.0.2601"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Http.Abstractions/2.2.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Features": "2.2.0",
+          "System.Text.Encodings.Web": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Http.Abstractions.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18316"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Http.Features/2.2.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "2.2.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Http.Features.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18316"
+          }
+        }
+      },
+      "Microsoft.Extensions.Primitives/2.2.0": {
+        "dependencies": {
+          "System.Memory": "4.5.1",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Primitives.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18315"
           }
         }
       },
@@ -133,7 +170,70 @@
             "fileVersion": "2.0.22.11401"
           }
         }
-      }
+      },
+      "System.Composition/7.0.0-preview.1.22076.8": {
+        "dependencies": {
+          "System.Composition.AttributedModel": "7.0.0-preview.1.22076.8",
+          "System.Composition.Convention": "7.0.0-preview.1.22076.8",
+          "System.Composition.Hosting": "7.0.0-preview.1.22076.8",
+          "System.Composition.Runtime": "7.0.0-preview.1.22076.8",
+          "System.Composition.TypedParts": "7.0.0-preview.1.22076.8"
+        }
+      },
+      "System.Composition.AttributedModel/7.0.0-preview.1.22076.8": {
+        "runtime": {
+          "lib/net6.0/System.Composition.AttributedModel.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.0.22.7608"
+          }
+        }
+      },
+      "System.Composition.Convention/7.0.0-preview.1.22076.8": {
+        "dependencies": {
+          "System.Composition.AttributedModel": "7.0.0-preview.1.22076.8"
+        },
+        "runtime": {
+          "lib/net6.0/System.Composition.Convention.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.0.22.7608"
+          }
+        }
+      },
+      "System.Composition.Hosting/7.0.0-preview.1.22076.8": {
+        "dependencies": {
+          "System.Composition.Runtime": "7.0.0-preview.1.22076.8"
+        },
+        "runtime": {
+          "lib/net6.0/System.Composition.Hosting.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.0.22.7608"
+          }
+        }
+      },
+      "System.Composition.Runtime/7.0.0-preview.1.22076.8": {
+        "runtime": {
+          "lib/net6.0/System.Composition.Runtime.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.0.22.7608"
+          }
+        }
+      },
+      "System.Composition.TypedParts/7.0.0-preview.1.22076.8": {
+        "dependencies": {
+          "System.Composition.AttributedModel": "7.0.0-preview.1.22076.8",
+          "System.Composition.Hosting": "7.0.0-preview.1.22076.8",
+          "System.Composition.Runtime": "7.0.0-preview.1.22076.8"
+        },
+        "runtime": {
+          "lib/net6.0/System.Composition.TypedParts.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.0.22.7608"
+          }
+        }
+      },
+      "System.Memory/4.5.1": {},
+      "System.Runtime.CompilerServices.Unsafe/4.5.1": {},
+      "System.Text.Encodings.Web/4.5.0": {}
     }
   },
   "libraries": {
@@ -170,6 +270,27 @@
       "path": "google.apis.drive.v3/1.56.0.2601",
       "hashPath": "google.apis.drive.v3.1.56.0.2601.nupkg.sha512"
     },
+    "Microsoft.AspNetCore.Http.Abstractions/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Nxs7Z1q3f1STfLYKJSVXCs1iBl+Ya6E8o4Oy1bCxJ/rNI44E/0f6tbsrVqAWfB7jlnJfyaAtIalBVxPKUPQb4Q==",
+      "path": "microsoft.aspnetcore.http.abstractions/2.2.0",
+      "hashPath": "microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Http.Features/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ziFz5zH8f33En4dX81LW84I6XrYXKf9jg6aM39cM+LffN9KJahViKZ61dGMSO2gd3e+qe5yBRwsesvyqlZaSMg==",
+      "path": "microsoft.aspnetcore.http.features/2.2.0",
+      "hashPath": "microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Primitives/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-azyQtqbm4fSaDzZHD/J+V6oWMFaf2tWP4WEGIYePLCMw3+b2RQdj9ybgbQyjCshcitQKQ4lEDOZjmSlTTrHxUg==",
+      "path": "microsoft.extensions.primitives/2.2.0",
+      "hashPath": "microsoft.extensions.primitives.2.2.0.nupkg.sha512"
+    },
     "Newtonsoft.Json/13.0.1": {
       "type": "package",
       "serviceable": true,
@@ -190,6 +311,69 @@
       "sha512": "sha512-sNy+prEfFXmNPL29FRaS35rwCT9gpXRT/LywFnCw1iB8b3aIp5eDOL0ykKrVdLVP3pYSvrBWVvb7cQZVMwE69A==",
       "path": "system.commandline.namingconventionbinder/2.0.0-beta3.22114.1",
       "hashPath": "system.commandline.namingconventionbinder.2.0.0-beta3.22114.1.nupkg.sha512"
+    },
+    "System.Composition/7.0.0-preview.1.22076.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HeGvQKaFW94x4NlK+akZNE7qTyp3umIWtvj4Cvh06LQCdh5ES4WVr9S6XknUVGZCHHDVSvy7GoWPXo98Sxw2xQ==",
+      "path": "system.composition/7.0.0-preview.1.22076.8",
+      "hashPath": "system.composition.7.0.0-preview.1.22076.8.nupkg.sha512"
+    },
+    "System.Composition.AttributedModel/7.0.0-preview.1.22076.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8Y2Frtn97zfMmuW8cgHZWwQp1sFvBkmtzZ68lJqo/qIqtnuqiwKnoxUwHaz0Q6mA8tqy+chf4NoJE9TUTUtnBg==",
+      "path": "system.composition.attributedmodel/7.0.0-preview.1.22076.8",
+      "hashPath": "system.composition.attributedmodel.7.0.0-preview.1.22076.8.nupkg.sha512"
+    },
+    "System.Composition.Convention/7.0.0-preview.1.22076.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IZ1Oa7UfvWBeoRAxBklWA0u9wbS4ZbXF7CT+0nWaNMYT+3olRNDbzZHrpiLmzxtlm/QBPxfNXE05SzZEL10ZEg==",
+      "path": "system.composition.convention/7.0.0-preview.1.22076.8",
+      "hashPath": "system.composition.convention.7.0.0-preview.1.22076.8.nupkg.sha512"
+    },
+    "System.Composition.Hosting/7.0.0-preview.1.22076.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mQVuNXNS90cDdUjfqVHCA3HpzYr4fFW6XHGRhLZF75ke2yYvO/i2Lj3BftSTeKVAye0dC6gXv3Inf4fyoQ3dgw==",
+      "path": "system.composition.hosting/7.0.0-preview.1.22076.8",
+      "hashPath": "system.composition.hosting.7.0.0-preview.1.22076.8.nupkg.sha512"
+    },
+    "System.Composition.Runtime/7.0.0-preview.1.22076.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ZIWtNvxfF/njHP/JTg9gwsWg3Z9N9fwpWZkHbTPmaWW4HYjxY7NvGN+1Sw//Nhn+EpV3VVVVNk0t+VTJX6o7qg==",
+      "path": "system.composition.runtime/7.0.0-preview.1.22076.8",
+      "hashPath": "system.composition.runtime.7.0.0-preview.1.22076.8.nupkg.sha512"
+    },
+    "System.Composition.TypedParts/7.0.0-preview.1.22076.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ApixTG5lRSVEJf9qGCElqB5Bf9RNXhboa6OOqXUAtuGrAYynedODZB6gjWnrGzGjy2Q+oLn5wLb0nhloURGcGg==",
+      "path": "system.composition.typedparts/7.0.0-preview.1.22076.8",
+      "hashPath": "system.composition.typedparts.7.0.0-preview.1.22076.8.nupkg.sha512"
+    },
+    "System.Memory/4.5.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-sDJYJpGtTgx+23Ayu5euxG5mAXWdkDb4+b0rD0Cab0M1oQS9H0HXGPriKcqpXuiJDTV7fTp/d+fMDJmnr6sNvA==",
+      "path": "system.memory/4.5.1",
+      "hashPath": "system.memory.4.5.1.nupkg.sha512"
+    },
+    "System.Runtime.CompilerServices.Unsafe/4.5.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Zh8t8oqolRaFa9vmOZfdQm/qKejdqz0J9kr7o2Fu0vPeoH3BL1EOXipKWwkWtLT1JPzjByrF19fGuFlNbmPpiw==",
+      "path": "system.runtime.compilerservices.unsafe/4.5.1",
+      "hashPath": "system.runtime.compilerservices.unsafe.4.5.1.nupkg.sha512"
+    },
+    "System.Text.Encodings.Web/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Xg4G4Indi4dqP1iuAiMSwpiWS54ZghzR644OtsRCm/m/lBMG8dUBhLVN7hLm8NNrNTR+iGbshCPTwrvxZPlm4g==",
+      "path": "system.text.encodings.web/4.5.0",
+      "hashPath": "system.text.encodings.web.4.5.0.nupkg.sha512"
     }
   }
 }

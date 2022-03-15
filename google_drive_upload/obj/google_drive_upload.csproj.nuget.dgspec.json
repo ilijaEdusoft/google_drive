@@ -44,6 +44,10 @@
               "target": "Package",
               "version": "[1.56.0.2601, )"
             },
+            "Microsoft.AspNetCore.Http.Abstractions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "System.CommandLine": {
               "target": "Package",
               "version": "[2.0.0-beta3.22114.1, )"
@@ -51,6 +55,10 @@
             "System.CommandLine.NamingConventionBinder": {
               "target": "Package",
               "version": "[2.0.0-beta3.22114.1, )"
+            },
+            "System.Composition": {
+              "target": "Package",
+              "version": "[7.0.0-preview.1.22076.8, )"
             }
           },
           "imports": [
