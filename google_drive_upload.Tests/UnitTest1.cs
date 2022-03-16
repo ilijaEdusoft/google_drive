@@ -97,7 +97,7 @@ namespace google_drive_upload.Tests
             var filePath = Path.GetTempFileName();
             var fileName = Path.GetFileName(filePath);
             var _uploader = upl.UploadFile(fileName, filePath);
-            string? downloadPath = $"{upl._temp}{fileName}";
+            string? downloadPath = $"{upl._downlodPath}{fileName}";
             var _downloader = upl.DownloadFile(_uploader, downloadPath);
             if (!String.IsNullOrEmpty(downloadPath))
                 Assert.Equal(_uploader, _downloader);
