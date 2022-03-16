@@ -10,12 +10,12 @@ namespace google_drive_upload
 {
     public class Uploader
     {
-        public string[] Scopes = { DriveService.Scope.Drive };
         public string? _folderId = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_FOLDER_ID");
         public string? _ClientId = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_CLIENT_ID");
         public string? _ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_SECRET_KEY");
         public string? _temp = Environment.GetEnvironmentVariable("TEMP");
         public string? _downlodPath = Environment.GetEnvironmentVariable("DOWNLOAD");
+        public string? _PathToCredentials = Environment.GetEnvironmentVariable("CREDENTIALS");
         public const string _regex = @"^[\w\-. ]+$";
         public int Check_Preconditions(string _FileName)
         {
@@ -52,20 +52,14 @@ namespace google_drive_upload
         }
         protected DriveService GetService()
         {
-            UserCredential credential;
-            credential = GoogleWebAuthorizationBroker.AuthorizeAsync(new ClientSecrets
-            {
-                ClientId = _ClientId,
-                ClientSecret = _ClientSecret
-            },
-            Scopes,
-            "user", CancellationToken.None).Result;
+            var credentials = GoogleCredential.FromFile(_PathToCredentials).CreateScoped(DriveService.ScopeConstants.Drive);
 
             var service = new Google.Apis.Drive.v3.DriveService(new BaseClientService.Initializer()
             {
-                HttpClientInitializer = credential
+                HttpClientInitializer = credentials
             });
             return service;
+
         }
         public string UploadFile(string __fileName, string __filePath)
         {
@@ -75,7 +69,6 @@ namespace google_drive_upload
             if (_folderId is not null)
                 fileMetadata.Parents = new List<string> { _folderId };
             FilesResource.CreateMediaUpload request;
-
             using (var stream = new FileStream(__filePath, FileMode.Open))
             {
                 request = service.Files.Create(fileMetadata, stream, String.Empty);
@@ -106,12 +99,12 @@ namespace google_drive_upload
                     {
                         case Google.Apis.Download.DownloadStatus.Completed:
                             {
-                                Console.WriteLine("Download complete.");
+                                Console.WriteLine("Download Complete!");
                                 break;
                             }
                         case Google.Apis.Download.DownloadStatus.Failed:
                             {
-                                Console.WriteLine("Download Failed.");
+                                Console.WriteLine("Download Failed!");
                                 break;
                             }
                     }
@@ -141,7 +134,6 @@ namespace google_drive_upload
         }
         private static int CMDHelperAsync(Google.Apis.Drive.v3.Data.File file, string filename)
         {
-
             Uploader up = new Uploader();
             Console.WriteLine($"File to be uploaded {filename}");
             string _filePath = Path.GetFullPath(filename);

@@ -31,16 +31,15 @@ namespace google_drive_upload.Tests
             var file = new FileInfo(tempFilePath);
             Assert.True(file.Exists);
         }
-
         [Fact]
-        public void preconditionsCheckFileExists()
+        public void CheckFileExists()
         {
             var tempFile = Path.GetTempFileName();
             bool exists = up.FileExists(tempFile);
             Assert.True(exists);
         }
         [Fact]
-        public void preconditionsCheckFileNotExists()
+        public void CheckFileNotExists()
         {
             var tempFile = Path.GetTempFileName();
             File.Delete(tempFile);
@@ -92,32 +91,7 @@ namespace google_drive_upload.Tests
     public class UploaderTest
     {
         [Fact]
-        public void checkUploader()
-        {
-            Uploader up = new Uploader();
-
-            var filePath = Path.GetTempFileName();
-            var fileName = Path.GetFileName(filePath);
-            var uploader = up.UploadFile(fileName, filePath);
-            Assert.NotNull(uploader);
-            Assert.NotEmpty(uploader);
-        }
-
-        [Fact]
-        public void checkDownloader()
-        {
-            Uploader upl = new Uploader();
-            var filePath = Path.GetTempFileName();
-            var fileName = Path.GetFileName(filePath);
-            var fileID = upl.UploadFile(fileName, filePath);
-            string downloadPath = $"{upl._temp}{fileName}"; //gettempfolder
-            var downloader = upl.DownloadFile(fileID, downloadPath);
-            Assert.NotNull(downloader);
-            Assert.NotEmpty(downloader);
-        }
-
-        [Fact]
-        public void CompareFiles()
+        public void checkUploadDownloadFiles()
         {
             Uploader upl = new Uploader();
             var filePath = Path.GetTempFileName();
@@ -131,9 +105,5 @@ namespace google_drive_upload.Tests
             var downloader = _downloader.Length;
             Assert.Equal(uploader, downloader);
         }
-
     };
-
-
 }
-

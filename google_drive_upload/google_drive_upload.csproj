@@ -9,11 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Apis.Auth" Version="1.56.0" />
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.56.0.2601" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta3.22114.1" />
     <PackageReference Include="System.CommandLine.NamingConventionBinder" Version="2.0.0-beta3.22114.1" />
     <PackageReference Include="System.Composition" Version="7.0.0-preview.1.22076.8" />
+    <PackageReference Include="Universal.Google.Authentication.OAuth2" Version="0.1.2" />
   </ItemGroup>
 
 </Project>
