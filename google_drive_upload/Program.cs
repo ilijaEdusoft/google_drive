@@ -1,4 +1,4 @@
-﻿using Google.Apis.Auth.OAuth2;
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
 using Google.Apis.Services;
 using System.CommandLine;
@@ -10,12 +10,10 @@ namespace google_drive_upload
 {
     public class Uploader
     {
-        public string? _folderId = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_FOLDER_ID");
-        public string? _ClientId = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_CLIENT_ID");
-        public string? _ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_SECRET_KEY");
-        public string? _temp = Environment.GetEnvironmentVariable("TEMP");
-        public string? _downlodPath = Environment.GetEnvironmentVariable("DOWNLOAD");
-        public string? _PathToCredentials = Environment.GetEnvironmentVariable("CREDENTIALS");
+        public string? _FolderId = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_FOLDER_ID");
+        public string? _PrivateKey = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_PRIVATE_KEY");
+        public string? _ClientEmail = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_CLIENT_EMAIL");
+        public string? _ServiceAccountType = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_PROJECT_TYPE");
         public const string _regex = @"^[\w\-. ]+$";
         public int Check_Preconditions(string _FileName)
         {
@@ -24,20 +22,25 @@ namespace google_drive_upload
                 Console.WriteLine("Non valid file name! Please rename your file using 'A-Z', 'a-z' letters, '0-9' numbers, '-' and '_'.");
                 return -1;
             }
-            if (String.IsNullOrEmpty(_ClientId))
-            {
-                Console.WriteLine("GOOGLE_UPLOAD_CLIENT_ID - environment variable not found! Please check the right value of GOOGLE_UPLOAD_CLIENT_ID");
-                return -2;
-            }
-            if (String.IsNullOrEmpty(_ClientSecret))
-            {
-                Console.WriteLine("GOOGLE_UPLOAD_SECRET_KEY - environment variable not found!\n Please check the right value of GOOGLE_UPLOAD_SECRET_KEY");
-                return -3;
-            }
-            if (String.IsNullOrEmpty(_folderId))
+            if (String.IsNullOrEmpty(_FolderId))
             {
                 Console.WriteLine("GOOGLE_UPLOAD_FOLDER_ID - environment variable not found!\n Please check the right value of GOOGLE_UPLOAD_FOLDER_ID");
+                return -2;
+            }
+            if (String.IsNullOrEmpty(_PrivateKey))
+            {
+                Console.WriteLine("GOOGLE_UPLOAD_PRIVATE_KEY - environment variable not found!\n Please check the right value of GOOGLE_UPLOAD_PRIVATE_KEY");
+                return -3;
+            }
+            if (String.IsNullOrEmpty(_ClientEmail))
+            {
+                Console.WriteLine("GOOGLE_UPLOAD_CLIENT_EMAIL - environment variable not found!\n Please check the right value of GOOGLE_UPLOAD_CLIENT_EMAIL");
                 return -4;
+            }
+            if (String.IsNullOrEmpty(_ServiceAccountType))
+            {
+                Console.WriteLine("GOOGLE_UPLOAD_PROJECT_TYPE - environment variable not found!\n Please check the right value of GOOGLE_UPLOAD_PROJECT_TYPE");
+                return -5;
             }
             return 0;
         }
@@ -52,22 +55,29 @@ namespace google_drive_upload
         }
         protected DriveService GetService()
         {
-            var credentials = GoogleCredential.FromFile(_PathToCredentials).CreateScoped(DriveService.ScopeConstants.Drive);
+            var parameters = new JsonCredentialParameters
+            {
+                Type = _ServiceAccountType,
+                PrivateKey = _PrivateKey,
+                ClientEmail = _ClientEmail,
+            };
+
+            var credentials = GoogleCredential.FromJsonParameters(parameters).CreateScoped(DriveService.ScopeConstants.Drive);
 
             var service = new Google.Apis.Drive.v3.DriveService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credentials
             });
             return service;
-
         }
-        public string UploadFile(string __fileName, string __filePath)
+        public string UploadFile(string __filePath)
         {
             DriveService service = GetService();
+            string __fileName = Path.GetFileName(__filePath);
             var fileMetadata = new Google.Apis.Drive.v3.Data.File();
             fileMetadata.Name = __fileName;
-            if (_folderId is not null)
-                fileMetadata.Parents = new List<string> { _folderId };
+            if (_FolderId is not null)
+                fileMetadata.Parents = new List<string> { _FolderId };
             FilesResource.CreateMediaUpload request;
             using (var stream = new FileStream(__filePath, FileMode.Open))
             {
@@ -87,7 +97,7 @@ namespace google_drive_upload
                 return file.Id;
             }
         }
-        public string DownloadFile(string fileId, string filePath)
+        public string DownloadFile(string fileId, string DownloadPath)
         {
             DriveService service = GetService();
             var request = service.Files.Get(fileId);
@@ -110,7 +120,7 @@ namespace google_drive_upload
                     }
                 };
                 request.Download(memoryStream);
-                using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                using (var fileStream = new FileStream(DownloadPath, FileMode.Create, FileAccess.Write))
                 {
                     fileStream.Write(memoryStream.GetBuffer(), 0, memoryStream.GetBuffer().Length);
                 }
@@ -138,13 +148,11 @@ namespace google_drive_upload
             Console.WriteLine($"File to be uploaded {filename}");
             string _filePath = Path.GetFullPath(filename);
             string _fileName = Path.GetFileName(_filePath);
-            string downloadPath = $"{up._downlodPath}{_fileName}";
             up.FileExists(_filePath);
             int err = up.Check_Preconditions(_fileName);
             if (err < 0)
                 return err;
-            var fileId = up.UploadFile(_fileName, _filePath);
-            up.DownloadFile(fileId, downloadPath);
+            up.UploadFile(_filePath);
             return 0;
         }
         private static Command WithHandler(this Command command, string methodName)
