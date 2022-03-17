@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using Xunit;
 namespace google_drive_upload.Tests
@@ -50,60 +51,76 @@ namespace google_drive_upload.Tests
     public class checkENV
     {
         Uploader up = new Uploader();
-        [Fact]
-        public void checkClientID()
-        {
-            string? _clientID = up._ClientId;
-            Assert.NotNull(_clientID);
-        }
-        [Fact]
-        public void checkClientId()
-        {
-            string? clienId = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_CLIENT_ID");
-            Assert.NotNull(clienId);
-        }
-        [Fact]
-        public void checkClientSECRET()
-        {
-            string? _clientSecret = up._ClientSecret;
-            Assert.NotNull(_clientSecret);
-        }
-        [Fact]
-        public void checkClientSecret()
-        {
-            string? clientSecret = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_SECRET_KEY");
-            Assert.NotNull(clientSecret);
-        }
+
         [Fact]
         public void checkFolderID()
         {
-            string? _folderID = up._folderId;
-            Assert.NotNull(_folderID);
+            string? _FolderID = up._FolderId;
+            Assert.NotNull(_FolderID);
         }
         [Fact]
         public void checkFolderId()
         {
-            string? folderId = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_FOLDER_ID");
-            Assert.NotNull(folderId);
+            string? FolderId = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_FOLDER_ID");
+            Assert.NotNull(FolderId);
+        }
+        [Fact]
+        public void checkPrivateKEY()
+        {
+            string? _PrivateKEY = up._PrivateKey;
+            Assert.NotNull(_PrivateKEY);
+        }
+        [Fact]
+        public void checkPrivateKey()
+        {
+            string? PrivateKey = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_PRIVATE_KEY");
+            Assert.NotNull(PrivateKey);
+        }
+        [Fact]
+        public void checkClientEMAIL()
+        {
+            string? _ClientEMAIL = up._ClientEmail;
+            Assert.NotNull(_ClientEMAIL);
+        }
+        [Fact]
+        public void checkClientEmail()
+        {
+            string? ClientEmail = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_CLIENT_EMAIL");
+            Assert.NotNull(ClientEmail);
+        }
+        [Fact]
+        public void checkProjectTYPE()
+        {
+            string? _ProjectTYPE = up._ProjectType;
+            Assert.NotNull(_ProjectTYPE);
+        }
+        [Fact]
+        public void checkProjectType()
+        {
+            string? ProjectType = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_PROJECT_TYPE");
+            Assert.NotNull(ProjectType);
         }
     };
 
     public class UploaderTest
     {
+        public string? _downlodPath = Environment.GetEnvironmentVariable("DOWNLOAD");
+
         [Fact]
         public void checkUploadDownloadFiles()
         {
             Uploader upl = new Uploader();
-            var filePath = Path.GetTempFileName();
-            var fileName = Path.GetFileName(filePath);
-            var _uploader = upl.UploadFile(fileName, filePath);
-            string? downloadPath = $"{upl._downlodPath}{fileName}";
-            var _downloader = upl.DownloadFile(_uploader, downloadPath);
-            if (!String.IsNullOrEmpty(downloadPath))
-                Assert.Equal(_uploader, _downloader);
-            var uploader = _uploader.Length;
-            var downloader = _downloader.Length;
-            Assert.Equal(uploader, downloader);
+            var _filePath = Path.GetTempFileName();
+            var _fileName = Path.GetFileName(_filePath);
+            var UploadedFileId = upl.UploadFile(_filePath);
+            var _DownloadPath = $"{_downlodPath}{_fileName}";
+            var DownloadedFileId = upl.DownloadFile(UploadedFileId, _DownloadPath);
+            Assert.Equal(UploadedFileId, DownloadedFileId);
+            FileInfo UploadedFile = new FileInfo(_filePath);
+            var UploadedFileSize = UploadedFile.Length;
+            FileInfo DownloadedFile = new FileInfo(_DownloadPath);
+            var DownloadedFileSize = DownloadedFile.Length;
+            Assert.Equal(UploadedFileSize, DownloadedFileSize);
         }
     };
 }
