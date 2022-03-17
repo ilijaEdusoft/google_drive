@@ -89,13 +89,13 @@ namespace google_drive_upload.Tests
             Assert.NotNull(ClientEmail);
         }
         [Fact]
-        public void checkProjectTYPE()
+        public void checkServiceAccountTYPE()
         {
-            string? _ProjectTYPE = up._ProjectType;
-            Assert.NotNull(_ProjectTYPE);
+            string? _ServiceAccountTYPE = up._ServiceAccountType;
+            Assert.NotNull(_ServiceAccountTYPE);
         }
         [Fact]
-        public void checkProjectType()
+        public void checkServiceAccountType()
         {
             string? ProjectType = Environment.GetEnvironmentVariable("GOOGLE_UPLOAD_PROJECT_TYPE");
             Assert.NotNull(ProjectType);
