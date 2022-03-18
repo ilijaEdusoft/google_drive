@@ -104,7 +104,7 @@ namespace google_drive_upload.Tests
 
     public class UploaderTest
     {
-        public string? _downlodPath = Environment.GetEnvironmentVariable("DOWNLOAD");
+        public string? _downlodPath = Environment.GetEnvironmentVariable("TEMP");
 
         [Fact]
         public void checkUploadDownloadFiles()
