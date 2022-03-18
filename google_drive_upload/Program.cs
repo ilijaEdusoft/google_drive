@@ -6,6 +6,8 @@ using System.Text.RegularExpressions;
 using System.CommandLine.NamingConventionBinder;
 using System.Reflection;
 using Google.Apis.Download;
+using Google.Apis.Drive.v3.Data;
+
 namespace google_drive_upload
 {
     public class Uploader
@@ -46,7 +48,7 @@ namespace google_drive_upload
         }
         public bool FileExists(string _filePath)
         {
-            if (File.Exists(_filePath))
+            if (System.IO.File.Exists(_filePath))
             {
                 return true;
             }
@@ -70,10 +72,30 @@ namespace google_drive_upload
             });
             return service;
         }
+        public bool UploadedFileExistAsync(string fileName)
+        {
+            DriveService service = GetService();
+            var ListRequest = service.Files.List();
+            ListRequest.Q = $"trashed = false and name contains '{fileName}'";
+            var files = ListRequest.Execute().Files;
+            foreach (var f in files)
+            {
+                if (fileName == f.Name)
+                    return true;
+            }
+            return false;
+        }
+
         public string UploadFile(string __filePath)
         {
             DriveService service = GetService();
             string __fileName = Path.GetFileName(__filePath);
+            bool exists = UploadedFileExistAsync(__fileName);
+            if (exists)
+            {
+                Console.WriteLine($"The {__fileName} already exists!");
+                return "-1";
+            }
             var fileMetadata = new Google.Apis.Drive.v3.Data.File();
             fileMetadata.Name = __fileName;
             if (_FolderId is not null)
