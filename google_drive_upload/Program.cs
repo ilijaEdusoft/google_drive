@@ -72,7 +72,7 @@ namespace google_drive_upload
             });
             return service;
         }
-        public bool UploadedFileExistAsync(string fileName)
+        public bool UploadedFileExist(string fileName)
         {
             DriveService service = GetService();
             var ListRequest = service.Files.List();
@@ -90,7 +90,7 @@ namespace google_drive_upload
         {
             DriveService service = GetService();
             string __fileName = Path.GetFileName(__filePath);
-            bool exists = UploadedFileExistAsync(__fileName);
+            bool exists = UploadedFileExist(__fileName);
             if (exists)
             {
                 Console.WriteLine($"The {__fileName} already exists!");
