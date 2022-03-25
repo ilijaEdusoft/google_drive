@@ -1,0 +1,42 @@
+using FlexCel.Report;
+using FlexCel.XlsAdapter;
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.IO;
+
+namespace ExportToExcelUsingFlexCel
+{
+    class Program
+    {
+        public static string _PathToSaveFile = Environment.GetEnvironmentVariable("PATH_TO_SAVE_FILE");
+        public static string _PathToOpenTemplate = Environment.GetEnvironmentVariable("PATH_TO_OPEN_TEMPLATE");
+        public static string _FileName;
+
+        [Obsolete]
+        public static void Main()
+        {
+            XlsFile xls = new XlsFile(true);
+            xls.Open(_PathToOpenTemplate);
+            using (FlexCelReport report = new FlexCelReport())
+            {
+                GetDataFromDataBase(report);
+                string _FileNameWithExtension = Path.ChangeExtension(_FileName, ".xls");
+                report.Run(_PathToOpenTemplate, @$"{_PathToSaveFile}{_FileNameWithExtension}");
+                Console.WriteLine($"The file: {_FileNameWithExtension} is created in '{_PathToSaveFile}'.");
+
+            }
+        }
+        protected static void GetDataFromDataBase(FlexCelReport fr)
+        {
+            SqlConnection conn = new SqlConnection("Data Source=ILIJA-PC\\SQL2019;Initial Catalog=Northwind;Integrated Security=True");
+            conn.Open();
+            SqlCommand command = new SqlCommand("SELECT * FROM Invoices", conn);
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+            DataSet dataSet = new DataSet();
+            dataAdapter.Fill(dataSet);
+            _FileName = conn.Database;
+            fr.AddTable("Invoices", dataSet.Tables[0]);
+        }
+    }
+}
